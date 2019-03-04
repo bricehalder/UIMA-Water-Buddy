@@ -50,7 +50,7 @@
         tools:text="@string/goal_msg" />
 
     <TextView
-        android:id="@+id/goal_text"
+        android:id="@+id/goal"
         android:layout_width="wrap_content"
         android:layout_height="66dp"
         android:layout_marginTop="32dp"
@@ -70,7 +70,7 @@
         android:layout_marginStart="8dp"
         android:textAlignment="center"
         android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/goal_text"
+        app:layout_constraintBaseline_toBaselineOf="@+id/goal"
         app:layout_constraintEnd_toEndOf="@+id/buddy"
         app:layout_constraintStart_toEndOf="@+id/buddy"
         tools:text="@string/today" />
@@ -98,43 +98,36 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageButton
-        android:id="@+id/undo"
-        style="@style/AppTheme"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@android:color/transparent"
-        android:onClick="unDrinkWater"
-        android:scaleType="fitCenter"
-        android:src="@drawable/undo"
-        app:layout_constraintEnd_toStartOf="@+id/add"
-        app:layout_constraintHorizontal_bias="0.56"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/waterSelector"
-        tools:src="@drawable/undo"
-        tools:srcCompat="@drawable/undo" />
-
-    <ImageButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/add"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="141dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:adjustViewBounds="false"
-        android:background="@android:color/transparent"
-        android:cropToPadding="false"
+        android:clickable="true"
         android:onClick="drinkWater"
-        android:scaleType="fitCenter"
-        android:src="@drawable/add"
-        android:tint="@color/colorText"
+        app:backgroundTint="@color/colorText"
+        app:elevation="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/undo"
         app:layout_constraintTop_toBottomOf="@+id/waterSelector"
-        tools:src="@drawable/add"
-        tools:srcCompat="@drawable/add" />
+        app:srcCompat="@drawable/add" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/undo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:onClick="unDrinkWater"
+        app:backgroundTint="@color/colorText"
+        app:elevation="2dp"
+        app:layout_constraintEnd_toStartOf="@+id/add"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/waterSelector"
+        app:srcCompat="@drawable/undo" />
 
 </android.support.constraint.ConstraintLayout>

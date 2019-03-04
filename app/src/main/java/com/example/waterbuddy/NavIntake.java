@@ -2,6 +2,8 @@ package com.example.waterbuddy;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -56,7 +58,7 @@ public class NavIntake extends AppCompatActivity
         goal = getString(R.string.goal);
         today = getString(R.string.today);
 
-        ((TextView) findViewById(R.id.goal_text)).setText(goal.replace("XX", Integer.toString(waterGoal)));
+        ((TextView) findViewById(R.id.goal)).setText(goal.replace("XX", Integer.toString(waterGoal)));
 
         ((TextView) findViewById(R.id.dispSelect)).setText(Integer.toString(seek.getProgress()) + " oz.");
 
@@ -75,15 +77,6 @@ public class NavIntake extends AppCompatActivity
         });
 
         updateDisplay();
-
-//        Button btn = (Button)findViewById(R.id.action_settings_button);
-//
-//        btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(NavIntake.this, SettingsActivity.class));
-//            }
-//        });
     }
 
     @Override
@@ -111,7 +104,7 @@ public class NavIntake extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings_button) {
+        if (id == R.id.action_settings) {
             startActivity(new Intent(NavIntake.this, SettingsActivity.class));
             return true;
         }
@@ -129,8 +122,7 @@ public class NavIntake extends AppCompatActivity
             Toast toast = Toast.makeText(getApplicationContext(), "intake nav pressed", Toast.LENGTH_SHORT);
             toast.show();
         } else if (id == R.id.nav_history) {
-            Toast toast = Toast.makeText(getApplicationContext(), "history nav pressed", Toast.LENGTH_SHORT);
-            toast.show();
+            startActivity(new Intent(NavIntake.this, History.class));
         } else if (id == R.id.nav_notif) {
             Toast toast = Toast.makeText(getApplicationContext(), "notif nav pressed", Toast.LENGTH_SHORT);
             toast.show();
