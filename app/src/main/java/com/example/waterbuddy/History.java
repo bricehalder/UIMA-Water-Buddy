@@ -1,9 +1,11 @@
 package com.example.waterbuddy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,10 +29,10 @@ public class History extends AppCompatActivity
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_details:
-                    mTextMessage.setText(R.string.bottom_details);
+                    mTextMessage.setText(R.string.details);
                     return true;
                 case R.id.navigation_totals:
-                    mTextMessage.setText(R.string.bottom_totals);
+                    mTextMessage.setText(R.string.totals);
                     return true;
             }
             return false;
@@ -69,8 +71,24 @@ public class History extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        Toast toast = Toast.makeText(getApplicationContext(), "I'm taking this one thing at a time what the fuck do you want from me?", Toast.LENGTH_SHORT);
-        toast.show();
-        return false;
+        int id = menuItem.getItemId();
+
+        switch (id) {
+            case R.id.nav_intake:
+                startActivity(new Intent(History.this, NavIntake.class));
+                break;
+            case R.id.nav_history:
+                // intentionally do nothing
+                break;
+            case R.id.nav_notif:
+                //startActivity(new Intent(History.this, NavIntake.class));
+                break;
+            default:
+                break;
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

@@ -32,4 +32,7 @@
     <string name="oz_ml_toggle">ToggleButton</string>
     <string name="ml">mL</string>
     <string name="oz">oz</string>
+    <string name="details">DETAILS</string>
+    <string name="totals">TOTALS</string>
+    <string name="back">BACK</string>
 </resources>

@@ -118,14 +118,19 @@ public class NavIntake extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_intake) {
-            Toast toast = Toast.makeText(getApplicationContext(), "intake nav pressed", Toast.LENGTH_SHORT);
-            toast.show();
-        } else if (id == R.id.nav_history) {
-            startActivity(new Intent(NavIntake.this, History.class));
-        } else if (id == R.id.nav_notif) {
-            Toast toast = Toast.makeText(getApplicationContext(), "notif nav pressed", Toast.LENGTH_SHORT);
-            toast.show();
+        switch (id) {
+            case R.id.nav_intake:
+                // intentionally do nothing
+                break;
+            case R.id.nav_history:
+                startActivity(new Intent(NavIntake.this, History.class));
+                break;
+            case R.id.nav_notif:
+                Toast toast = Toast.makeText(getApplicationContext(), "notif nav pressed", Toast.LENGTH_SHORT);
+                toast.show();
+                break;
+            default:
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
