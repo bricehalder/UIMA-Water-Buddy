@@ -126,8 +126,7 @@ public class NavIntake extends AppCompatActivity
                 startActivity(new Intent(NavIntake.this, History.class));
                 break;
             case R.id.nav_notif:
-                Toast toast = Toast.makeText(getApplicationContext(), "notif nav pressed", Toast.LENGTH_SHORT);
-                toast.show();
+                startActivity(new Intent(NavIntake.this, notif.class));
                 break;
             default:
                 break;

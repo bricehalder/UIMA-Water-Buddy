@@ -35,4 +35,82 @@
     <string name="details">DETAILS</string>
     <string name="totals">TOTALS</string>
     <string name="back">BACK</string>
+
+    <!--Notif strings-->
+    <string name="title_activity_notif">Notifications</string>
+    <string name="cancel_btn">CANCEL</string>
+    <string name="save_btn">SAVE</string>
+    <string name="notif_freq">Notify me every</string>
+    <string name="notif_start">starting at</string>
+    <string name="notif_thresh">if I have not yet met</string>
+    <string name="notif_goal">of my prorated goal</string>
+    <string name="notif_email">Email Summary</string>
+    <string name="by">by</string>
+    <string name="notif_email_hint">enter email address</string>
+
+    <string-array name="notif_freq_array">
+        <item>1 sec</item>
+        <item>1 min</item>
+        <item>5 min</item>
+        <item>10 min</item>
+        <item>15 min</item>
+        <item>30 min</item>
+        <item>1 hour</item>
+        <item>2 hours</item>
+        <item>3 hours</item>
+        <item>4 hours</item>
+        <item>5 hours</item>
+        <item>6 hours</item>
+    </string-array>
+
+    <string-array name="notif_thresh_array">
+        <item>0%</item>
+        <item>5%</item>
+        <item>10%</item>
+        <item>15%</item>
+        <item>20%</item>
+        <item>25%</item>
+        <item>30%</item>
+        <item>35%</item>
+        <item>40%</item>
+        <item>45%</item>
+        <item>50%</item>
+        <item>55%</item>
+        <item>60%</item>
+        <item>65%</item>
+        <item>70%</item>
+        <item>75%</item>
+        <item>80%</item>
+        <item>85%</item>
+        <item>90%</item>
+        <item>95%</item>
+        <item>100%</item>
+    </string-array>
+
+    <string-array name="notif_time_array">
+        <item>12am</item>
+        <item>1am</item>
+        <item>2am</item>
+        <item>3am</item>
+        <item>4am</item>
+        <item>5am</item>
+        <item>6am</item>
+        <item>7am</item>
+        <item>8am</item>
+        <item>9am</item>
+        <item>10am</item>
+        <item>11am</item>
+        <item>12pm</item>
+        <item>1pm</item>
+        <item>2pm</item>
+        <item>3pm</item>
+        <item>4pm</item>
+        <item>5pm</item>
+        <item>6pm</item>
+        <item>7pm</item>
+        <item>8pm</item>
+        <item>9pm</item>
+        <item>10pm</item>
+        <item>11pm</item>
+    </string-array>
 </resources>

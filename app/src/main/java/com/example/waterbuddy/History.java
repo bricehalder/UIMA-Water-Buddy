@@ -81,7 +81,7 @@ public class History extends AppCompatActivity
                 // intentionally do nothing
                 break;
             case R.id.nav_notif:
-                //startActivity(new Intent(History.this, NavIntake.class));
+                startActivity(new Intent(History.this, notif.class));
                 break;
             default:
                 break;

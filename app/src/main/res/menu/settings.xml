@@ -5,10 +5,10 @@
     <item
         android:id="@+id/back"
         android:enabled="true"
-        android:icon="@android:drawable/ic_menu_close_clear_cancel"
+        android:icon="@drawable/x"
         android:layoutDirection="ltr"
         android:orderInCategory="100"
         android:title="@string/back"
         android:visible="true"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
 </menu>
