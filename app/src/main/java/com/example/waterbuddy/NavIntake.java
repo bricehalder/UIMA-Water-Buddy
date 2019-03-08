@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class NavIntake extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

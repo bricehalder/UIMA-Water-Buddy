@@ -13,11 +13,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 public class SettingsActivity extends AppCompatActivity {
+    final static float OZ_ML_CONVERT = 28.4131f;
+
     private EditText goal;
+    private ToggleButton units;
+    private ToggleButton notifs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +35,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_settings);
 
-        goal = findViewById(R.id.goal_input);
+        goal = (EditText) findViewById(R.id.goal_input);
+        units = (ToggleButton) findViewById(R.id.units_toggle);
+        notifs = (ToggleButton) findViewById(R.id.notif_toggle);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -60,7 +69,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
         ((EditText) findViewById(R.id.daily_reset_input)).setText(sp.getString("time", "00:00"));
-        goal.setText(Integer.toString((sp.getInt("goal", 64))));
+        goal.setText(Integer.toString(sp.getInt("goal", 64)));
+        units.setChecked(sp.getBoolean("oz", true));
     }
 
     @Override
@@ -85,17 +95,38 @@ public class SettingsActivity extends AppCompatActivity {
     public void applyGoal(View view) {
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
         SharedPreferences.Editor spe = sp.edit();
-        spe.putInt("goal", Integer.parseInt(goal.getText().toString()));
-        spe.commit();
+        int inputGoal = Integer.parseInt(goal.getText().toString());
+        if (inputGoal <= 0) {
+            Toast goalInErrToast = Toast.makeText(SettingsActivity.this, "Goal must be positive.", Toast.LENGTH_SHORT);
+            goalInErrToast.show();
+        } else {
+            spe.putInt("goal", Integer.parseInt(goal.getText().toString()));
+            spe.commit();
+        }
     }
 
     public void togUnits(View view) {
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
         SharedPreferences.Editor spe = sp.edit();
+        spe.putBoolean("oz", units.isChecked());
+
+        int convGoal;
+        /** Not checked -> checked means ml -> oz */
+        if (units.isChecked()) {
+            convGoal = Math.round(sp.getInt("goal", Math.round(64 * OZ_ML_CONVERT)) / OZ_ML_CONVERT);
+        /** Checked -> not means oz -> ml */
+        } else {
+            convGoal = Math.round(sp.getInt("goal", 64) * OZ_ML_CONVERT);
+        }
+        spe.putInt("goal", convGoal);
+        goal.setText(Integer.toString(convGoal));
+        spe.commit();
     }
 
     public void togNotifs(View view) {
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
         SharedPreferences.Editor spe = sp.edit();
+        spe.putBoolean("notifs", notifs.isChecked());
+        spe.commit();
     }
 }
