@@ -1,6 +1,8 @@
 package com.example.waterbuddy;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,7 +22,7 @@ import android.widget.TextView;
 public class NavIntake extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     /** The user's water consumption goal. In oz. Standard. */
-    private static final int waterGoal = 64;
+    private int waterGoal = 64;
     private int waterCur;
     private int waterPrev;
 
@@ -50,16 +52,9 @@ public class NavIntake extends AppCompatActivity
         buddyView.setImageResource(R.drawable.wb0);
         seek = (SeekBar) findViewById(R.id.waterSelector);
 
-        waterCur = 0;
-        waterPrev = 0;
-
         goalMsg = getString(R.string.goal_msg);
         goal = getString(R.string.goal);
         today = getString(R.string.today);
-
-        ((TextView) findViewById(R.id.goal)).setText(goal.replace("XX", Integer.toString(waterGoal)));
-
-        ((TextView) findViewById(R.id.dispSelect)).setText(Integer.toString(seek.getProgress()) + " oz.");
 
         seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -74,6 +69,21 @@ public class NavIntake extends AppCompatActivity
                 //nothing
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        /** Display the shared preferences info. */
+        SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
+        waterCur = sp.getInt("waterCur", 0);
+        waterPrev = sp.getInt("waterPrev", 0);
+        waterGoal = sp.getInt("goal", 64);
+
+        ((TextView) findViewById(R.id.goal)).setText(goal.replace("XX", Integer.toString(waterGoal)));
+
+        ((TextView) findViewById(R.id.dispSelect)).setText(Integer.toString(seek.getProgress()) + " oz.");
 
         updateDisplay();
     }
@@ -141,6 +151,13 @@ public class NavIntake extends AppCompatActivity
     public void drinkWater(View view) {
         waterPrev = seek.getProgress();
         waterCur += waterPrev;
+
+        SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putInt("waterCur", waterCur);
+        spe.putInt("waterPrev", waterPrev);
+        spe.commit();
+
         updateDisplay();
     }
 
@@ -148,6 +165,13 @@ public class NavIntake extends AppCompatActivity
     public void unDrinkWater(View view) {
         waterCur -= waterPrev;
         waterPrev = 0;
+
+        SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putInt("waterCur", waterCur);
+        spe.putInt("waterPrev", waterPrev);
+        spe.commit();
+
         updateDisplay();
     }
 
