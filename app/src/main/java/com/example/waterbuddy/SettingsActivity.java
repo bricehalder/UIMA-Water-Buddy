@@ -19,6 +19,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class SettingsActivity extends AppCompatActivity {
     final static float OZ_ML_CONVERT = 28.4131f;
 
@@ -54,6 +57,9 @@ public class SettingsActivity extends AppCompatActivity {
                             public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
                                 chooseTime.setText(String.format("%02d:%02d", hourOfDay, minutes));
                                 spe.putString("time", chooseTime.getText().toString());
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                Calendar cal = Calendar.getInstance();
+                                spe.putString("date", sdf.format(cal.getTime()));
                                 spe.commit();
                             }
                         }, 0, 0, false);
@@ -111,14 +117,22 @@ public class SettingsActivity extends AppCompatActivity {
         spe.putBoolean("oz", units.isChecked());
 
         int convGoal;
+        int convCur;
+        int convPrev;
         /** Not checked -> checked means ml -> oz */
         if (units.isChecked()) {
             convGoal = Math.round(sp.getInt("goal", Math.round(64 * OZ_ML_CONVERT)) / OZ_ML_CONVERT);
+            convCur = Math.round(sp.getInt("waterCur", 0) / OZ_ML_CONVERT);
+            convPrev = Math.round(sp.getInt("waterPrev", 0) / OZ_ML_CONVERT);
         /** Checked -> not means oz -> ml */
         } else {
             convGoal = Math.round(sp.getInt("goal", 64) * OZ_ML_CONVERT);
+            convCur = Math.round(sp.getInt("waterCur", 0) * OZ_ML_CONVERT);
+            convPrev = Math.round(sp.getInt("waterPrev", 0) * OZ_ML_CONVERT);
         }
         spe.putInt("goal", convGoal);
+        spe.putInt("waterCur", convCur);
+        spe.putInt("waterPrev", convPrev);
         goal.setText(Integer.toString(convGoal));
         spe.commit();
     }

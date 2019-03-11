@@ -2,8 +2,8 @@
     <string name="app_name">Water Buddy</string>
     <string name="header">WATER BUDDY!</string>
     <string name="goal_msg">XX% of goal met!</string>
-    <string name="goal">GOAL: XX oz.</string>
-    <string name="today">TODAY: XX oz.</string>
+    <string name="goal">GOAL: XX</string>
+    <string name="today">TODAY: XX</string>
     <string name="title_activity_nav_intake">NavIntake</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,12 +17,19 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class NavIntake extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    /** The user's water consumption goal. In oz. Standard. */
-    private int waterGoal = 64;
+    final static float OZ_ML_CONVERT = 28.4131f;
+
+    private int waterGoal;
     private int waterCur;
     private int waterPrev;
+    private String units;
+    /** True if units are ml, false if oz. Scales seekbar by OZ_ML_CONVERT if units are ml. */
+    private boolean seekbarMl;
 
     private ImageView buddyView;
     private SeekBar seek;
@@ -52,13 +57,15 @@ public class NavIntake extends AppCompatActivity
         buddyView.setImageResource(R.drawable.wb0);
         seek = (SeekBar) findViewById(R.id.waterSelector);
 
-        goalMsg = getString(R.string.goal_msg);
-        goal = getString(R.string.goal);
-        today = getString(R.string.today);
-
         seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                ((TextView) findViewById(R.id.dispSelect)).setText(Integer.toString(progress) + " oz.");
+                int sbAmount;
+                if (seekbarMl) {
+                    sbAmount = Math.round(progress * OZ_ML_CONVERT);
+                } else {
+                    sbAmount = progress;
+                }
+                ((TextView) findViewById(R.id.dispSelect)).setText(Integer.toString(sbAmount) + units);
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -75,15 +82,44 @@ public class NavIntake extends AppCompatActivity
     public void onResume() {
         super.onResume();
 
-        /** Display the shared preferences info. */
+        /** Display the settings stored in the sharedprefs as well as the current daily water consumption. */
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor spe = sp.edit();
         waterCur = sp.getInt("waterCur", 0);
         waterPrev = sp.getInt("waterPrev", 0);
         waterGoal = sp.getInt("goal", 64);
+        if (sp.getBoolean("oz", true)) {
+            units = " oz.";
+            seekbarMl = false;
+            ((TextView) findViewById(R.id.dispSelect)).setText(Integer.toString(seek.getProgress()) + units);
+        } else {
+            units = " ml.";
+            seekbarMl = true;
+            ((TextView) findViewById(R.id.dispSelect)).setText(Integer.toString(Math.round(OZ_ML_CONVERT * seek.getProgress())) + units);
+        }
+
+        /** Oh wow dates are complicated */
+        /** Brice can you take care of this? It currently doesn't work. */
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
+        String currentDate = sdf.format(cal.getTime());
+        String defDate = currentDate.substring(0, 10);
+
+        String resetDT = sp.getString("date", defDate) + " " + sp.getString("time", "00:00");
+
+        if ((currentDate).compareTo(resetDT) <= 0) {
+            resetProgress();
+            cal.add(Calendar.DAY_OF_YEAR, 1);
+            resetDT = sdf2.format(cal.getTime());
+            spe.putString("date", resetDT);
+        }
+
+        goalMsg = getString(R.string.goal_msg);
+        goal = getString(R.string.goal) + units;
+        today = getString(R.string.today) + units;
 
         ((TextView) findViewById(R.id.goal)).setText(goal.replace("XX", Integer.toString(waterGoal)));
-
-        ((TextView) findViewById(R.id.dispSelect)).setText(Integer.toString(seek.getProgress()) + " oz.");
 
         updateDisplay();
     }
@@ -121,7 +157,6 @@ public class NavIntake extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -145,7 +180,6 @@ public class NavIntake extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
     /** Called when the user taps the add button. */
     public void drinkWater(View view) {
@@ -197,7 +231,14 @@ public class NavIntake extends AppCompatActivity
         ((TextView) findViewById(R.id.cur)).setText(today.replace("XX", Integer.toString(waterCur)));
     }
 
-
+    /** Called when the user's day is over and progress must be reset. */
+    private void resetProgress() {
+        SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor spe = sp.edit();
+        waterCur = 0;
+        waterPrev = 0;
+        spe.putInt("waterCur", 0);
+        spe.putInt("waterPrev", 0);
+        spe.commit();
+    }
 }
-
-
