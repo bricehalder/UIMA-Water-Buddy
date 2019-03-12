@@ -22,7 +22,7 @@ import java.util.Calendar;
 
 public class NavIntake extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    final static float OZ_ML_CONVERT = 28.4131f;
+    final static float OZ_ML_CONVERT = 29.574f;
 
     private int waterGoal;
     private int waterCur;
@@ -108,11 +108,15 @@ public class NavIntake extends AppCompatActivity
 
         String resetDT = sp.getString("date", defDate) + " " + sp.getString("time", "00:00");
 
+
+        // curr  12/03/2019 19:45
+        // reset  12/03/2019
         if ((currentDate).compareTo(resetDT) <= 0) {
             resetProgress();
             cal.add(Calendar.DAY_OF_YEAR, 1);
             resetDT = sdf2.format(cal.getTime());
             spe.putString("date", resetDT);
+            spe.commit();
         }
 
         goalMsg = getString(R.string.goal_msg);
@@ -184,7 +188,12 @@ public class NavIntake extends AppCompatActivity
     /** Called when the user taps the add button. */
     public void drinkWater(View view) {
         waterPrev = seek.getProgress();
-        waterCur += waterPrev;
+
+        if (seekbarMl) {
+            waterCur += Math.round(OZ_ML_CONVERT * waterPrev);
+        } else {
+            waterCur += waterPrev;
+        }
 
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
         SharedPreferences.Editor spe = sp.edit();

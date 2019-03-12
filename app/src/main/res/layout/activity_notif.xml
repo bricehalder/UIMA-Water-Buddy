@@ -123,7 +123,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/notif_email_hint"
-            android:textColor="@color/colorText" />
+            android:textColor="@color/colorText"
+            android:maxLines="1"
+            android:imeOptions="actionDone"
+            android:singleLine="true" />
     </android.support.design.widget.TextInputLayout>
 
     <Spinner

@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class SettingsActivity extends AppCompatActivity {
-    final static float OZ_ML_CONVERT = 28.4131f;
+    final static float OZ_ML_CONVERT = 29.574f;
 
     private EditText goal;
     private ToggleButton units;
@@ -77,6 +77,7 @@ public class SettingsActivity extends AppCompatActivity {
         ((EditText) findViewById(R.id.daily_reset_input)).setText(sp.getString("time", "00:00"));
         goal.setText(Integer.toString(sp.getInt("goal", 64)));
         units.setChecked(sp.getBoolean("oz", true));
+        notifs.setChecked(sp.getBoolean("notifs", false));
     }
 
     @Override
