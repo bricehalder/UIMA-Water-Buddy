@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class NavIntake extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,6 +38,7 @@ public class NavIntake extends AppCompatActivity
     private SeekBar seek;
 
     private String goalMsg, goal, today;
+    private String dayOfYear, time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,25 +102,23 @@ public class NavIntake extends AppCompatActivity
             ((TextView) findViewById(R.id.dispSelect)).setText(Integer.toString(Math.round(OZ_ML_CONVERT * seek.getProgress())) + units);
         }
 
-        /** Oh wow dates are complicated */
-        /** Brice can you take care of this? It currently doesn't work. */
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
-        String currentDate = sdf.format(cal.getTime());
-        String defDate = currentDate.substring(0, 10);
+        String lastResetDay = sp.getString("date", "-1");
 
-        String resetDT = sp.getString("date", defDate) + " " + sp.getString("time", "00:00");
+        dayOfYear = DateFormat.format("dd", new Date()).toString();
+        time = DateFormat.format("HH:mm", new Date()).toString();
 
+        // basically print line debugging here don't mind this
+//        Log.d("DAY", dayOfYear);
+//        Log.d("LASTRESETDAY", lastResetDay);
+//        Log.d("EQUAL", (dayOfYear != lastResetDay) ? "not equal" : "equal");
+//        Log.d("TIME", time);
+//        Log.d("RESETTIME", sp.getString("time", "00:00"));
 
-        // curr  12/03/2019 19:45
-        // reset  12/03/2019
-        if ((currentDate).compareTo(resetDT) <= 0) {
+        if (!dayOfYear.equals(lastResetDay) && time.compareTo(sp.getString("time", "00:00")) >= 0) {
             resetProgress();
-            cal.add(Calendar.DAY_OF_YEAR, 1);
-            resetDT = sdf2.format(cal.getTime());
-            spe.putString("date", resetDT);
-            spe.commit();
+            lastResetDay = dayOfYear;
+            spe.putString("date", lastResetDay.toString());
+            spe.apply();
         }
 
         goalMsg = getString(R.string.goal_msg);
@@ -188,12 +190,7 @@ public class NavIntake extends AppCompatActivity
     /** Called when the user taps the add button. */
     public void drinkWater(View view) {
         waterPrev = seek.getProgress();
-
-        if (seekbarMl) {
-            waterCur += Math.round(OZ_ML_CONVERT * waterPrev);
-        } else {
-            waterCur += waterPrev;
-        }
+        waterCur += seekbarMl ? Math.round(OZ_ML_CONVERT * waterPrev) : waterPrev;
 
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
         SharedPreferences.Editor spe = sp.edit();
@@ -206,7 +203,7 @@ public class NavIntake extends AppCompatActivity
 
     /** Called when the user taps the undo button. */
     public void unDrinkWater(View view) {
-        waterCur -= waterPrev;
+        waterCur -= seekbarMl ? Math.round(OZ_ML_CONVERT * waterPrev) : waterPrev;
         waterPrev = 0;
 
         SharedPreferences sp = getSharedPreferences("prefs", Activity.MODE_PRIVATE);
