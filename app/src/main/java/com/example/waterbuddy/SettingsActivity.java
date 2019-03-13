@@ -115,21 +115,17 @@ public class SettingsActivity extends AppCompatActivity {
 
         int convGoal;
         int convCur;
-        int convPrev;
         /** Not checked -> checked means ml -> oz */
         if (units.isChecked()) {
             convGoal = Math.round(sp.getInt("goal", Math.round(64 * OZ_ML_CONVERT)) / OZ_ML_CONVERT);
             convCur = Math.round(sp.getInt("waterCur", 0) / OZ_ML_CONVERT);
-            convPrev = Math.round(sp.getInt("waterPrev", 0) / OZ_ML_CONVERT);
         /** Checked -> not means oz -> ml */
         } else {
             convGoal = Math.round(sp.getInt("goal", 64) * OZ_ML_CONVERT);
             convCur = Math.round(sp.getInt("waterCur", 0) * OZ_ML_CONVERT);
-            convPrev = Math.round(sp.getInt("waterPrev", 0) * OZ_ML_CONVERT);
         }
         spe.putInt("goal", convGoal);
         spe.putInt("waterCur", convCur);
-        spe.putInt("waterPrev", convPrev);
         goal.setText(Integer.toString(convGoal));
         spe.commit();
     }
