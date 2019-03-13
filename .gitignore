@@ -11,4 +11,5 @@
 .externalNativeBuild
 .idea/
 local.properties
+.gradle/*
 
