@@ -53,9 +53,6 @@ public class SettingsActivity extends AppCompatActivity {
                             public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
                                 chooseTime.setText(String.format("%02d:%02d", hourOfDay, minutes));
                                 spe.putString("time", chooseTime.getText().toString());
-                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                Calendar cal = Calendar.getInstance();
-                                spe.putString("date", sdf.format(cal.getTime()));
                                 spe.commit();
                             }
                         }, 0, 0, false);

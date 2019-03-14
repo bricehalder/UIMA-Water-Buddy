@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -104,11 +105,18 @@ public class NavIntake extends AppCompatActivity
         dayOfYear = DateFormat.format("dd", new Date()).toString();
         time = DateFormat.format("HH:mm", new Date()).toString();
 
+        Log.d("DAY", dayOfYear);
+        Log.d("RESETDAY", lastResetDay);
+
         if (!dayOfYear.equals(lastResetDay) && time.compareTo(sp.getString("time", "00:00")) >= 0) {
             resetProgress();
-            lastResetDay = dayOfYear;
-            spe.putString("date", lastResetDay.toString());
-            spe.apply();
+            lastResetDay = dayOfYear.substring(0,2);
+
+            Log.d("DAYIN", dayOfYear);
+            Log.d("RESETDAYIN", lastResetDay);
+
+            spe.putString("date", lastResetDay);
+            spe.commit();
         }
 
         goalMsg = getString(R.string.goal_msg);
